@@ -5,6 +5,7 @@ import Pagination from '../components/Pagination';
 import AddButton from '../components/AddButton';
 import { fetchProducts } from '../services/pichinchaService';
 import dateFormatter from '../utilities/DateFormatter';
+import ContextMenu from '../components/ContextMenu';
 
 const ProductList: React.FC = () => {
   const [data, setData] = useState<any>(null);
@@ -30,7 +31,7 @@ const ProductList: React.FC = () => {
   const handleSearch = (query:string) => {
     const filteredData = data.filter((item:any) => {
       return item.name.toLowerCase().includes(query.toLowerCase());
-    });
+    });     
 
     setFilteredData(filteredData);
     setCurrentPage(1);
@@ -69,6 +70,7 @@ const ProductList: React.FC = () => {
                 <th>Descripcion</th>
                 <th>Fecha de Liberacion</th>
                 <th>Fecha de Revision</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -79,10 +81,11 @@ const ProductList: React.FC = () => {
                     <td>{item.description}</td>
                     <td>{dateFormatter(item.date_release)}</td>
                     <td>{dateFormatter(item.date_revision)}</td>
+                    <td><ContextMenu/></td>
                   </tr>
                 ))}
             </tbody>
-          </table>
+          </table>          
         </div>
       )}
       <Pagination

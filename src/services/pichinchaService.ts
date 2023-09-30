@@ -10,7 +10,7 @@ const API_BASE_URL = 'https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.
 
 export const fetchProducts = () => {
     return axios.get(`${API_BASE_URL}/products`, config);
-}
+};
 
 export const createProduct = (newProduct: any) => {
     return new Promise((resolve, reject) => {
@@ -22,4 +22,8 @@ export const createProduct = (newProduct: any) => {
             console.error('Error creating new product:', error);
         });
     })
-  };
+};
+
+export const deleteProduct = (productId: string) => {
+    return axios.delete(`${API_BASE_URL}/products?id=${productId}`, config);
+};

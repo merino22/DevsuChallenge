@@ -9,7 +9,7 @@ interface AddButtonProps {
 
 const AddButton: React.FC<AddButtonProps> = ({ to, content, className = '' }) => {
     return (
-        <Link to={to} className={`btn ${className}`} style={{textDecoration: 'none'}}>
+        <Link to={to} className={`${className}`} style={{textDecoration: 'none'}}>
             {content}
         </Link>
     );

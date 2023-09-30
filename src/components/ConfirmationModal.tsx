@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { deleteProduct } from "../services/pichinchaService";
 
 interface ConfirmationModalProps {
     isOpen: boolean;
-    content: string;
+    content: any;
     onClose: () => void;
 }
 
@@ -17,6 +18,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, 
         height: '100%',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         zIndex: 1000,
+        minWidth: '30rem',
       };
     
       const modalContentStyle: React.CSSProperties = {
@@ -27,21 +29,39 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, 
         backgroundColor: 'white',
         padding: '20px',
         borderRadius: '5px',
+        height: '10rem',
         boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.2)',
         zIndex: 1001,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
       };
+
+      const buttonsContainerStyle: React.CSSProperties = {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+      };
+
+      const handleDelete = () => {
+        deleteProduct(content.id)
+         .then((response) => {
+          console.log('Product Delete Successfully', response);
+          window.location.reload();
+         })
+         .catch((error) => {
+          console.log('Error encountered: ', error)
+         })
+      }
 
       return (
         <div style={modalStyle}>
           <div style={modalContentStyle}>
-            <button onClick={onClose} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>
-              X
-            </button>
-            {content}
+            Estas seguro de eliminar el producto {content.name}?
 
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <button>Cancelar</button>
-                <button>Confirmar</button>
+            <div style={buttonsContainerStyle}>
+                <button onClick={onClose} className="button button-full grey-bg" style={{marginRight: '0.5rem'}}>Cancelar</button>
+                <button onClick={handleDelete} className="button button-full yellow-bg" style={{marginLeft: '0.5rem'}}>Confirmar</button>
             </div>
           </div>
         </div>

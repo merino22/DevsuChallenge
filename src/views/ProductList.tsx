@@ -56,7 +56,7 @@ const ProductList: React.FC = () => {
     <div className='container'>
       <div className='flex-container' style={{paddingBottom: '1rem'}}>
         <SearchBar onSearch={handleSearch}/>
-        <AddButton to='/agregar' content="Agregar" className='yellow-pichincha-bg add-button'/>
+        <AddButton to='/agregar' content="Agregar" className='yellow-bg button'/>
       </div>
       {loading ? (
         <p>Loading...</p>
@@ -81,7 +81,7 @@ const ProductList: React.FC = () => {
                     <td>{item.description}</td>
                     <td>{dateFormatter(item.date_release)}</td>
                     <td>{dateFormatter(item.date_revision)}</td>
-                    <td><ContextMenu/></td>
+                    <td><ContextMenu product={item}/></td>
                   </tr>
                 ))}
             </tbody>

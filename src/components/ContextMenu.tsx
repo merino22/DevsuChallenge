@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import ConfirmationModal from "./ConfirmationModal";
 
-const ContextMenu: React.FC<any> = ({}) => {
+interface ContextMenuProps {
+  product: []
+}
+
+const ContextMenu: React.FC<ContextMenuProps> = ({product}) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,7 +23,7 @@ const ContextMenu: React.FC<any> = ({}) => {
             <div className="dropdown">
             <a href="/editar"><div>Editar</div></a>
             <a onClick={openModal}><div>Eliminar</div></a>
-            <ConfirmationModal isOpen={isModalOpen} onClose={closeModal} content="Seguro que quieres eliminar este producto?"/>
+            <ConfirmationModal isOpen={isModalOpen} onClose={closeModal} content={product}/>
             </div>
         </div>
     );

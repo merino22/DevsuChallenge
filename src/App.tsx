@@ -2,11 +2,21 @@ import React from 'react';
 import './App.css';
 import ProductList from './views/ProductList';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import CreateProduct from './views/CreateProduct';
 import Banner from './components/Banner';
-import { createProduct } from './services/pichinchaService';
+import { createProduct, updateProduct } from './services/pichinchaService';
+import EditProduct from './views/EditProduct';
+import CreateProduct from './views/CreateProduct';
 
 function App() {
+
+  const product = {
+    id: '',
+    name: '',
+    description: '',
+    logo: '',
+    date_release: '',
+    date_revision: ''
+  }
 
   const handleNewProductSubmit = (newProduct: any) => {
 
@@ -19,6 +29,16 @@ function App() {
       });
   };
 
+  const handleProductEdit = (product: any) => {
+    updateProduct(product)
+    .then((response) => {
+      console.log('Product updated: ', product);
+    })
+    .catch((error) => {
+      console.error('Error updating product:', error);
+    });
+  }
+
   return (
     <Router>
       <div className="App">
@@ -28,10 +48,10 @@ function App() {
             <ProductList />
           </Route>
           <Route path="/agregar">
-            <CreateProduct onSubmit={handleNewProductSubmit}/>
+            <CreateProduct onSubmit={handleNewProductSubmit} productData={product} checked={false}/>
           </Route>
           <Route path="/editar">
-            <CreateProduct onSubmit={handleNewProductSubmit}/>
+            <EditProduct onSubmit={handleProductEdit}/>
           </Route>
         </Switch>
         

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "typeRoots": ["node_modules/@types"],
-    "types": ["react", "react-dom", "react-router-dom"],
+    "types": ["react", "react-dom", "react-router-dom", "node"],
     "target": "es5",
     "lib": [
       "dom",

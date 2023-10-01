@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-interface CreateProductProps {
+interface FormProps {
     onSubmit: (newProduct: any) => void;
     productData: {
         id: string,
@@ -10,24 +10,33 @@ interface CreateProductProps {
         date_release: string,
         date_revision: string
     };
-    checked: boolean
 }
 
-const CreateProduct: React.FC<CreateProductProps> = ({ onSubmit, productData, checked }) => {
+const Form: React.FC<FormProps> = ({ onSubmit, productData }) => {
 
     const [newProductData, setNewProductData] = useState<any>(productData);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if (productData.date_release && productData.date_revision) {
+        if (productData.date_release && productData.date_revision) {
+            const dateReleaseFrag = productData.date_release.split('T')[0];
+            const dateRevisionFrag = productData.date_revision.split('T')[0];
 
-    //         setNewProductData({
-    //             ...newProductData,
-    //             date_release: productData.date_release,
-    //             date_revision: productData.date_revision
-    //         })
-    //     }
-    // }, []);
+            const dateRelease = new Date(dateReleaseFrag);
+            const dateRevision = new Date(dateRevisionFrag);
+
+            const formattedDateRelease = `${dateRelease.getMonth() + 1}/${dateRelease.getDate()}/${dateRelease.getFullYear()}`;
+            const formattedDateRevision = `${dateRevision.getMonth() + 1}/${dateRevision.getDate()}/${dateRevision.getFullYear()}`;
+
+            console.log(productData.date_release);
+
+            setNewProductData({
+                ...newProductData,
+                date_release: formattedDateRelease,
+                date_revision: formattedDateRevision
+            })
+        }
+    }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -37,31 +46,18 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSubmit, productData, ch
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        alert(newProductData.date_release);
-        onSubmit(newProductData);
-        setNewProductData({
-            id: '',
-            name: '',
-            description: '',
-            logo: '',
-            date_release: '',
-            date_revision: ''
-        })
-    };
-
-    const handleReset = (e: React.FormEvent) => {
-        e.preventDefault();
-        setNewProductData({
-            id: '',
-            name: '',
-            description: '',
-            logo: '',
-            date_release: '',
-            date_revision: ''
-        })
-    }
+    // const handleSubmit = (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     onSubmit(newProductData);
+    //     setNewProductData({
+    //         id: '',
+    //         name: '',
+    //         description: '',
+    //         logo: '',
+    //         date_release: '',
+    //         date_revision: ''
+    //     })
+    // };
 
     const formStyle: React.CSSProperties = {
         display: 'grid',
@@ -85,7 +81,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSubmit, productData, ch
     }
 
     return (
-        <form onSubmit={handleSubmit} style={formStyle}>
+        <form onSubmit={onSubmit} style={formStyle}>
             <div className='flex flex-row justify-evenly'>
                 <div className='flex flex-col input-container'>
                     <label style={inputLabelStyle}>ID</label>
@@ -96,7 +92,6 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSubmit, productData, ch
                     value={newProductData.id}
                     onChange={handleInputChange}
                     style={inputStyle}
-                    disabled={checked}
                     required
                     />
                 </div>
@@ -166,11 +161,11 @@ const CreateProduct: React.FC<CreateProductProps> = ({ onSubmit, productData, ch
                 </div>
             </div>
             <div className='flex flex-row justify-evenly'>
-                <button className='button button-full grey-bg' style={{maxWidth: '6rem'}} onClick={handleReset}>Reiniciar</button>
+                <button className='button button-full grey-bg' style={{maxWidth: '6rem'}}>Reiniciar</button>
                 <button className='button button-full yellow-bg' style={{maxWidth: '6rem'}} type='submit'>Enviar</button>
             </div>
         </form>
     )
 }
 
-export default CreateProduct;
+export default Form;

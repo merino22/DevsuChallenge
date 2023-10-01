@@ -1,113 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import CreateProduct from './CreateProduct';
 
-interface EditProductProps {
+interface CreateProductProps {
     onSubmit: (newProduct: any) => void;
 }
 
-const EditProduct: React.FC<EditProductProps> = ({ onSubmit }) => {
-    const [newProductData, setNewProductData] = useState<any>({
-        id: '',
-        name: '',
-        description: '',
-        logo: '',
-        date_release: '',
-        date_revision: ''
+const EditProduct: React.FC<CreateProductProps> = ({ 
+        onSubmit
+    }) => {
+
+    const deserializeProduct = () => {
+        try {
+            const serializedProduct = localStorage.getItem('itemToEdit');
+            if (serializedProduct !== null) {
+                return JSON.parse(serializedProduct);
+            }
+        } catch (error) {
+            console.log('Error trying to edit product: ', error);
+        }
+    }
+
+    const retrievedProduct = deserializeProduct();
+
+    function formatDate(inputDate: string): string {
+        const date = new Date(inputDate);
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const year = String(date.getFullYear());
+        
+        return `${year}-${month}-${day}`;
+    }
+
+    const [productData, setProductData] = useState<any>({
+        id: retrievedProduct.id,
+        name: retrievedProduct.name,
+        description: retrievedProduct.description,
+        logo: retrievedProduct.logo,
+        date_release: formatDate(retrievedProduct.date_release),
+        date_revision: formatDate(retrievedProduct.date_revision)
     });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setNewProductData((prevData: any) => ({
-            ...prevData,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onSubmit(newProductData);
-        setNewProductData({
-            id: '',
-            name: '',
-            description: '',
-            logo: '',
-            date_release: '',
-            date_revision: ''
-        })
-    };
-
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>ID</label>
-                <input 
-                  type="text" 
-                  name="id" 
-                  id="id" 
-                  value={newProductData.id}
-                  onChange={handleInputChange}
-                  required
-                  />
-            </div>
-            <div>
-                <label>Nombre</label>
-                <input 
-                  type="text" 
-                  name="name" 
-                  id="name" 
-                  value={newProductData.name}
-                  onChange={handleInputChange}
-                  required
-                  />
-            </div>
-            <div>
-                <label>Descripcion</label>
-                <input 
-                  type="text" 
-                  name="description" 
-                  id="description" 
-                  value={newProductData.description}
-                  onChange={handleInputChange}
-                  required
-                  />
-            </div>
-            <div>
-                <label>Logo</label>
-                <input 
-                  type="text" 
-                  name="logo" 
-                  id="logo" 
-                  value={newProductData.logo}
-                  onChange={handleInputChange}
-                  required
-                  />
-            </div>
-            <div>
-                <label>Fecha Liberacion</label>
-                <input 
-                  type="date" 
-                  name="date_release" 
-                  id="date_release" 
-                  value={newProductData.date_release}
-                  onChange={handleInputChange}
-                  required
-                  />
-            </div>
-            <div>
-                <label>Fecha Revision</label>
-                <input 
-                  type="date" 
-                  name="date_revision" 
-                  id="date_revision" 
-                  value={newProductData.date_revision}
-                  onChange={handleInputChange}
-                  required
-                  />
-            </div>
-            <div>
-                <button>Reiniciar</button>
-                <button type='submit'>Enviar</button>
-            </div>
-        </form>
+        <div>
+            <CreateProduct onSubmit={onSubmit} productData={productData} checked={true}/>
+        </div>
     )
 }
 

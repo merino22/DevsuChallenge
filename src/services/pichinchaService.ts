@@ -17,12 +17,28 @@ export const createProduct = (newProduct: any) => {
         axios.post(`${API_BASE_URL}/products`, newProduct, config)
         .then((response) => {
             console.log('Product created: ', newProduct);
+            resolve(response.data);
         })
         .catch((error) => {
             console.error('Error creating new product:', error);
         });
     })
 };
+
+export const updateProduct = (updatedProduct: any) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`${API_BASE_URL}/products`, updatedProduct, config)
+        .then((response) => {
+          console.log('Product updated: ', updatedProduct);
+          resolve(response.data);
+        })
+        .catch((error) => {
+          console.error('Error updating product:', error);
+          reject(error);
+        });
+    });
+  };
 
 export const deleteProduct = (productId: string) => {
     return axios.delete(`${API_BASE_URL}/products?id=${productId}`, config);
